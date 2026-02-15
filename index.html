@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="ApplyFast - Accelerate cash application in NetSuite by matching invoices and applying payments instantly. Free Chrome extension for NetSuite users.">
+  <title>ApplyFast - NetSuite Cash Application Assistant | Chrome Extension</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background: #ffffff;
+    }
+
+    /* Header */
+    header {
+      background: linear-gradient(135deg, #2b5876, #4e4376);
+      color: white;
+      padding: 1rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    nav {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      transition: opacity 0.3s;
+    }
+
+    .nav-links a:hover {
+      opacity: 0.8;
+    }
+
+    /* Hero Section */
+    .hero {
+      background: linear-gradient(135deg, #2b5876, #4e4376);
+      color: white;
+      padding: 5rem 2rem;
+      text-align: center;
+    }
+
+    .hero-content {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      font-weight: 700;
+    }
+
+    .hero p {
+      font-size: 1.25rem;
+      margin-bottom: 2rem;
+      opacity: 0.95;
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 1rem 2rem;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1.1rem;
+      transition: transform 0.2s, box-shadow 0.2s;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background: #FFDD00;
+      color: #000;
+      box-shadow: 0 4px 12px rgba(255,221,0,0.4);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(255,221,0,0.5);
+    }
+
+    .btn-secondary {
+      background: rgba(255,255,255,0.2);
+      color: white;
+      border: 2px solid white;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255,255,255,0.3);
+      transform: translateY(-2px);
+    }
+
+    /* Features Section */
+    .features {
+      max-width: 1200px;
+      margin: 4rem auto;
+      padding: 0 2rem;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 2.5rem;
+      margin-bottom: 3rem;
+      color: #2b5876;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-bottom: 4rem;
+    }
+
+    .feature-card {
+      background: #f8f9fa;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    }
+
+    .feature-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    .feature-card h3 {
+      color: #4e4376;
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+    }
+
+    .feature-card p {
+      color: #666;
+      line-height: 1.8;
+    }
+
+    /* How It Works */
+    .how-it-works {
+      background: #f8f9fa;
+      padding: 4rem 2rem;
+    }
+
+    .how-it-works-content {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .step {
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .step-number {
+      display: inline-block;
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, #2b5876, #4e4376);
+      color: white;
+      border-radius: 50%;
+      line-height: 60px;
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    .step h3 {
+      color: #4e4376;
+      margin-bottom: 1rem;
+    }
+
+    .step p {
+      color: #666;
+    }
+
+    /* Screenshots */
+    .screenshots {
+      max-width: 1400px;
+      margin: 4rem auto;
+      padding: 0 2rem;
+    }
+
+    .screenshot-carousel {
+      position: relative;
+      margin-top: 3rem;
+      overflow: hidden;
+    }
+
+    .screenshot-track {
+      display: flex;
+      gap: 1.5rem;
+      transition: transform 0.5s ease;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: thin;
+      padding-bottom: 1rem;
+    }
+
+    .screenshot-track::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    .screenshot-track::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 4px;
+    }
+
+    .screenshot-track::-webkit-scrollbar-thumb {
+      background: #4e4376;
+      border-radius: 4px;
+    }
+
+    .screenshot-item {
+      flex: 0 0 calc(25% - 1.125rem);
+      min-width: 280px;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+      transition: transform 0.3s, box-shadow 0.3s;
+      cursor: pointer;
+      scroll-snap-align: start;
+    }
+
+    .screenshot-item:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+    }
+
+    .screenshot-item img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* Modal for zoomed image */
+    .screenshot-modal {
+      display: none;
+      position: fixed;
+      z-index: 10000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.9);
+      cursor: zoom-out;
+    }
+
+    .screenshot-modal.active {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .screenshot-modal img {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 8px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    }
+
+    .screenshot-nav {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .screenshot-nav-btn {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #ccc;
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.3s;
+    }
+
+    .screenshot-nav-btn.active {
+      background: #4e4376;
+      transform: scale(1.2);
+    }
+
+    .screenshot-nav-btn:hover {
+      background: #2b5876;
+    }
+
+    /* Installation */
+    .installation {
+      background: linear-gradient(135deg, #2b5876, #4e4376);
+      color: white;
+      padding: 4rem 2rem;
+      text-align: center;
+    }
+
+    .installation-content {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .installation h2 {
+      font-size: 2.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .installation-steps {
+      text-align: left;
+      max-width: 600px;
+      margin: 2rem auto;
+      background: rgba(255,255,255,0.1);
+      padding: 2rem;
+      border-radius: 12px;
+    }
+
+    .installation-steps ol {
+      padding-left: 1.5rem;
+    }
+
+    .installation-steps li {
+      margin-bottom: 1rem;
+      line-height: 1.8;
+    }
+
+    /* Footer */
+    footer {
+      background: #2b5876;
+      color: white;
+      padding: 3rem 2rem;
+      text-align: center;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      color: white;
+      text-decoration: none;
+      transition: opacity 0.3s;
+    }
+
+    .footer-links a:hover {
+      opacity: 0.8;
+    }
+
+    .support-section {
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(255,255,255,0.2);
+    }
+
+    /* Guide Section */
+    .guide {
+      max-width: 1200px;
+      margin: 4rem auto;
+      padding: 0 2rem;
+    }
+
+    .guide-content {
+      background: #f8f9fa;
+      padding: 2rem;
+      border-radius: 12px;
+      margin-top: 2rem;
+    }
+
+    .guide-content h3 {
+      color: #4e4376;
+      margin-bottom: 1rem;
+      margin-top: 2rem;
+    }
+
+    .guide-content h3:first-child {
+      margin-top: 0;
+    }
+
+    .guide-content ul, .guide-content ol {
+      margin-left: 1.5rem;
+      margin-bottom: 1.5rem;
+      color: #666;
+      line-height: 1.8;
+    }
+
+    .guide-content code {
+      background: #e8e8e8;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-size: 0.9em;
+      color: #d63384;
+    }
+
+    .guide-content .example-box {
+      background: #fff;
+      border-left: 4px solid #4e4376;
+      padding: 1rem;
+      margin: 1rem 0;
+      border-radius: 4px;
+    }
+
+    /* Limitations Section */
+    .limitations {
+      background: #fff3cd;
+      border-left: 4px solid #ffc107;
+      padding: 2rem;
+      border-radius: 12px;
+      margin: 4rem auto;
+      max-width: 1200px;
+    }
+
+    .limitations h2 {
+      color: #856404;
+      margin-bottom: 1.5rem;
+    }
+
+    .limitations ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .limitations li {
+      padding: 0.75rem 0;
+      padding-left: 2rem;
+      position: relative;
+      color: #856404;
+      line-height: 1.8;
+    }
+
+    .limitations li:before {
+      content: "⚠️";
+      position: absolute;
+      left: 0;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2rem;
+      }
+
+      .hero p {
+        font-size: 1rem;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .cta-buttons {
+        flex-direction: column;
+      }
+
+      .btn {
+        width: 100%;
+      }
+
+      .screenshot-item {
+        flex: 0 0 calc(50% - 0.75rem);
+        min-width: 240px;
+      }
+
+      .screenshot-track {
+        gap: 1rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .screenshot-item {
+        flex: 0 0 85%;
+        min-width: 200px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <nav>
+      <div class="logo">
+        <span>⚡</span>
+        <span>ApplyFast</span>
+      </div>
+      <ul class="nav-links">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#how-it-works">How It Works</a></li>
+        <li><a href="#guide">Guide</a></li>
+        <li><a href="#screenshots">Screenshots</a></li>
+        <li><a href="#install">Install</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>⚡ ApplyFast</h1>
+      <p>Accelerate your NetSuite cash application workflow by matching invoices and applying payments instantly.</p>
+      <div class="cta-buttons">
+        <a href="#install" class="btn btn-primary">Install Extension</a>
+        <a href="https://buymeacoffee.com/jerald23siv" target="_blank" class="btn btn-secondary" style="background: #FFDD00; color: #000; border: 2px solid #FFDD00; font-weight: 700; box-shadow: 0 4px 16px rgba(255,221,0,0.5);">☕ Support Development - Buy Me A Coffee! ☕</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features" id="features">
+    <h2 class="section-title">Powerful Features</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🚀</div>
+        <h3>Instant Matching</h3>
+        <p>Automatically match invoices and apply payments with a single click. No more manual searching through long lists.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📋</div>
+        <h3>Excel Integration</h3>
+        <p>Copy and paste Excel data - supports 2 columns (Invoice | Amount) or 3 columns (Invoice | Discount | Amount). Automatically formats to the correct syntax.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">💰</div>
+        <h3>Partial Payments & Discounts</h3>
+        <p>Handle partial payments with <code>INV12345=100.00</code> or include discounts with <code>INV12345|10.00|100.00</code> format. Automatically populates "Disc. Taken" field in NetSuite.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <h3>Lightning Fast</h3>
+        <p>Process hundreds of invoices in seconds instead of hours. Save time and reduce errors.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🎯</div>
+        <h3>Smart Detection</h3>
+        <p>Intelligently detects invoice references, POs, and other sublist line IDs across your NetSuite payment screen.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔒</div>
+        <h3>Secure & Private</h3>
+        <p>All processing happens locally in your browser. No data is sent to external servers.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="how-it-works" id="how-it-works">
+    <div class="how-it-works-content">
+      <h2 class="section-title" style="color: #2b5876;">How It Works</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-number">1</div>
+          <h3>Install Extension</h3>
+          <p>Add ApplyFast to your Chrome browser in seconds. No configuration needed.</p>
+        </div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <h3>Open Payment Screen</h3>
+          <p>Navigate to the Accept Customer Payment screen in NetSuite.</p>
+        </div>
+        <div class="step">
+          <div class="step-number">3</div>
+          <h3>Paste & Match</h3>
+          <p>Paste your invoice list (or Excel columns) and click Match Lines. Done!</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Screenshots -->
+  <section class="screenshots" id="screenshots">
+    <h2 class="section-title">See It In Action</h2>
+    <div class="screenshot-carousel">
+      <div class="screenshot-track" id="screenshotTrack">
+        <div class="screenshot-item" data-index="0">
+          <img src="Screenshot 1.png" alt="ApplyFast in NetSuite - Main Interface" onerror="this.style.display='none'">
+        </div>
+        <div class="screenshot-item" data-index="1">
+          <img src="Screenshot 2.png" alt="ApplyFast - Matching Invoices" onerror="this.style.display='none'">
+        </div>
+        <div class="screenshot-item" data-index="2">
+          <img src="Screenshot 3.png" alt="ApplyFast - Results" onerror="this.style.display='none'">
+        </div>
+        <div class="screenshot-item" data-index="3">
+          <img src="Screenshot 4.png" alt="ApplyFast - Discount Feature" onerror="this.style.display='none'">
+        </div>
+      </div>
+      <div class="screenshot-nav" id="screenshotNav"></div>
+    </div>
+    <!-- Modal for zoomed images -->
+    <div class="screenshot-modal" id="screenshotModal">
+      <img id="modalImage" src="" alt="Zoomed Screenshot">
+    </div>
+  </section>
+
+  <!-- Guide Section -->
+  <section class="guide" id="guide">
+    <h2 class="section-title">Usage Guide</h2>
+    <div class="guide-content">
+      <h3>Getting Started</h3>
+      <ol>
+        <li>Install ApplyFast from the Chrome Web Store</li>
+        <li>Navigate to NetSuite's <strong>Accept Customer Payment</strong> screen</li>
+        <li>The ApplyFast interface will automatically appear on the right side of the screen</li>
+        <li>Click the header to expand the interface if it's minimized</li>
+      </ol>
+
+      <h3>Basic Usage</h3>
+      <p>Paste invoice references (one per line) into the text area. Each reference will be matched and applied for its remaining open balance.</p>
+      <div class="example-box">
+        <strong>Example:</strong><br>
+        <code>INV12345</code><br>
+        <code>PO67890</code><br>
+        <code>REF123</code>
+      </div>
+
+      <h3>Partial Payments</h3>
+      <p>To apply a partial payment, use the format: <code>INV12345=100.00</code> where the amount is in US format (comma for thousands, dot for decimal).</p>
+      <div class="example-box">
+        <strong>Example:</strong><br>
+        <code>INV12345=439.26</code><br>
+        <code>PO67890=1,234.56</code><br>
+        <code>REF123=100.00</code>
+      </div>
+
+      <h3>Excel Integration</h3>
+      <p>You can copy and paste data directly from Excel - the extension automatically detects the format:</p>
+      <ul>
+        <li><strong>Two columns:</strong> Invoice Reference | Payment Amount - automatically formats to <code>INV123=100.00</code></li>
+        <li><strong>Three columns:</strong> Invoice Reference | Discount Amount | Payment Amount - automatically formats to <code>INV123|10.00|100.00</code> and populates both discount and payment fields</li>
+      </ul>
+      <div class="example-box">
+        <strong>Excel Format (Two Columns):</strong><br>
+        INV12345&nbsp;&nbsp;&nbsp;&nbsp;100.00<br>
+        PO67890&nbsp;&nbsp;&nbsp;&nbsp;439.26<br><br>
+        <strong>Excel Format (Three Columns with Discount):</strong><br>
+        INV12345&nbsp;&nbsp;&nbsp;&nbsp;10.00&nbsp;&nbsp;&nbsp;&nbsp;100.00<br>
+        PO67890&nbsp;&nbsp;&nbsp;&nbsp;5.00&nbsp;&nbsp;&nbsp;&nbsp;439.26<br><br>
+        <em>When you paste 3-column data, ApplyFast automatically fills both the "Disc. Taken" and payment amount fields in NetSuite.</em>
+      </div>
+
+      <h3>Best Practices</h3>
+      <ul>
+        <li>Prepare your reference and amount data in a spreadsheet before pasting</li>
+        <li>Use consistent invoice reference formats</li>
+        <li>Verify matched invoices before saving the payment</li>
+        <li>For large batches (500+ lines), the extension can process them in under 2 minutes</li>
+      </ul>
+
+      <h3>Matching Process</h3>
+      <ol>
+        <li>Paste your invoice list into the text area</li>
+        <li>Click the <strong>"✅ Match Lines"</strong> button</li>
+        <li>The extension will automatically:
+          <ul>
+            <li>Find matching invoice references in the payment sublist</li>
+            <li>Check the checkbox for matched lines</li>
+            <li>Fill in the payment amounts (or use remaining balance if not specified)</li>
+          </ul>
+        </li>
+        <li>Review the matched count displayed below the button</li>
+        <li>Verify the matches in NetSuite before saving</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- Limitations Section -->
+  <section class="limitations" id="limitations">
+    <h2>Current Limitations</h2>
+    <ul>
+      <li><strong>US Number Format Only:</strong> Amount parsing supports US number format only (comma for thousands, dot for decimal). Other formats may not parse correctly.</li>
+      <li><strong>No Automatic Pagination:</strong> The extension works with the currently visible sublist page. If your invoices span multiple pages, you'll need to navigate pages manually.</li>
+      <li><strong>Discount Field Detection:</strong> Discount support works by automatically detecting the "Disc. Taken" field. In rare cases with heavily customized NetSuite forms, manual verification may be needed.</li>
+      <li><strong>Limited Testing:</strong> Tested in a limited number of NetSuite environments. Behavior may vary depending on your NetSuite configuration and customizations.</li>
+      <li><strong>Not Full Automation:</strong> ApplyFast is a lightweight productivity tool designed to speed up manual cash application. It is not a full AR automation system.</li>
+    </ul>
+    <p style="margin-top: 1.5rem; color: #856404; font-style: italic;">These limitations are being addressed in future updates. Your feedback helps prioritize improvements!</p>
+  </section>
+
+  <!-- Installation -->
+  <section class="installation" id="install">
+    <div class="installation-content">
+      <h2>Install ApplyFast</h2>
+      <p style="font-size: 1.2rem; margin-bottom: 2rem;">Get started in just a few simple steps</p>
+      <div class="installation-steps">
+        <ol>
+          <li>Click the <strong>"Install from Chrome Web Store"</strong> button below</li>
+          <li>Click <strong>"Add to Chrome"</strong> in the Chrome Web Store</li>
+          <li>Confirm the installation when prompted</li>
+          <li>Navigate to NetSuite's <strong>Accept Customer Payment</strong> screen</li>
+          <li>The ApplyFast interface will automatically appear on the right side!</li>
+        </ol>
+      </div>
+      <div style="margin-top: 2rem;">
+        <a href="https://chromewebstore.google.com/detail/applyfast-%E2%80%93-netsuite-cash/ohalkkngickdnobmmlnhnikpmnogcghm" target="_blank" class="btn btn-primary" style="background: white; color: #2b5876; font-size: 1.2rem; padding: 1.2rem 2.5rem;">Install from Chrome Web Store</a>
+      </div>
+      <p style="margin-top: 1.5rem; font-size: 0.95rem; opacity: 0.95; font-weight: 500;">✅ <strong>Yes, confirmed:</strong> The Chrome Web Store link will remain the same even when you update the extension package. Your users will always get the latest version automatically!</p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-links">
+        <a href="#features">Features</a>
+        <a href="#how-it-works">How It Works</a>
+        <a href="#guide">Guide</a>
+        <a href="#screenshots">Screenshots</a>
+        <a href="https://chromewebstore.google.com/detail/applyfast-%E2%80%93-netsuite-cash/ohalkkngickdnobmmlnhnikpmnogcghm" target="_blank">Chrome Web Store</a>
+        <a href="https://buymeacoffee.com/jerald23siv" target="_blank">Support</a>
+      </div>
+      <div class="support-section">
+        <div style="background: rgba(255,221,0,0.15); padding: 1.5rem; border-radius: 12px; margin-bottom: 1.5rem; border: 2px solid rgba(255,221,0,0.3);">
+          <p style="margin-bottom: 1rem; font-size: 1.1rem; font-weight: 600;">💝 Love ApplyFast? Support Future Development!</p>
+          <p style="margin-bottom: 1.5rem; opacity: 0.95;">Your support helps make ApplyFast better for everyone. Every contribution, big or small, is deeply appreciated! 🙏</p>
+          <a href="https://buymeacoffee.com/jerald23siv" target="_blank" style="display: inline-block; padding: 14px 28px; background: #FFDD00; color: #000; text-align: center; text-decoration: none; border-radius: 8px; font-weight: 700; font-size: 1.1rem; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 4px 16px rgba(255,221,0,0.5);" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 20px rgba(255,221,0,0.6)';" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 4px 16px rgba(255,221,0,0.5)';">☕ Buy Me A Coffee - Support ApplyFast! ☕</a>
+        </div>
+        <p style="margin-bottom: 1rem;">Made with ⚡ for NetSuite users</p>
+        <p style="opacity: 0.8; font-size: 0.9rem;">© 2024 ApplyFast. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Screenshot carousel functionality
+    (function() {
+      const track = document.getElementById('screenshotTrack');
+      const items = track.querySelectorAll('.screenshot-item');
+      const modal = document.getElementById('screenshotModal');
+      const modalImage = document.getElementById('modalImage');
+      const nav = document.getElementById('screenshotNav');
+      
+      // Create navigation dots
+      items.forEach((item, index) => {
+        const dot = document.createElement('button');
+        dot.className = 'screenshot-nav-btn' + (index === 0 ? ' active' : '');
+        dot.setAttribute('aria-label', `Go to screenshot ${index + 1}`);
+        dot.addEventListener('click', () => {
+          scrollToImage(index);
+        });
+        nav.appendChild(dot);
+      });
+      
+      // Update active dot on scroll
+      track.addEventListener('scroll', () => {
+        const scrollLeft = track.scrollLeft;
+        const itemWidth = items[0].offsetWidth + 24; // width + gap
+        const currentIndex = Math.round(scrollLeft / itemWidth);
+        
+        nav.querySelectorAll('.screenshot-nav-btn').forEach((dot, index) => {
+          dot.classList.toggle('active', index === currentIndex);
+        });
+      });
+      
+      // Click to zoom functionality
+      items.forEach((item, index) => {
+        const img = item.querySelector('img');
+        if (img) {
+          item.addEventListener('click', () => {
+            modalImage.src = img.src;
+            modalImage.alt = img.alt;
+            modal.classList.add('active');
+          });
+        }
+      });
+      
+      // Close modal on click
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal || e.target === modalImage) {
+          modal.classList.remove('active');
+        }
+      });
+      
+      // Close modal on Escape key
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('active')) {
+          modal.classList.remove('active');
+        }
+      });
+      
+      // Scroll to specific image
+      function scrollToImage(index) {
+        const item = items[index];
+        if (item) {
+          item.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        }
+      }
+      
+      // Touch/swipe support for mobile
+      let startX = 0;
+      let scrollLeft = 0;
+      let isDown = false;
+      
+      track.addEventListener('mousedown', (e) => {
+        isDown = true;
+        startX = e.pageX - track.offsetLeft;
+        scrollLeft = track.scrollLeft;
+        track.style.cursor = 'grabbing';
+      });
+      
+      track.addEventListener('mouseleave', () => {
+        isDown = false;
+        track.style.cursor = 'grab';
+      });
+      
+      track.addEventListener('mouseup', () => {
+        isDown = false;
+        track.style.cursor = 'grab';
+      });
+      
+      track.addEventListener('mousemove', (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - track.offsetLeft;
+        const walk = (x - startX) * 2;
+        track.scrollLeft = scrollLeft - walk;
+      });
+      
+      // Set cursor style
+      track.style.cursor = 'grab';
+    })();
+  </script>
+</body>
+</html>
